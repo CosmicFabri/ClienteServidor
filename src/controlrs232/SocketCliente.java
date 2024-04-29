@@ -10,6 +10,7 @@ package controlrs232;
  * @author Miguel Alejandro
  * @author Fabrizio Guzmán
  * @author Eduardo Naal
+ * modified
  */
 import java.net.*;
 import java.io.*;
