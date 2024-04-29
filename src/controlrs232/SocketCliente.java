@@ -7,7 +7,9 @@ package controlrs232;
 
 /**
  *
- * @author hecmquej
+ * @author Miguel Alejandro
+ * @author Fabrizio Guzmán
+ * @author Eduardo Naal
  */
 import java.net.*;
 import java.io.*;
