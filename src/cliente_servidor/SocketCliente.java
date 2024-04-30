@@ -23,33 +23,35 @@ public class SocketCliente {
 
     /**
      * Inicializar el socket con la dirección del host y puerto establecidos
+     *
+     * @throws java.io.IOException
      */
     public SocketCliente() throws IOException {
         try {
             socket = new Socket(HOST, PUERTO);
         } catch (ConnectException e) {
-            System.out.println("Probablemente no has iniciado el servidor");
-            e.printStackTrace();
+            System.out.println("Error de conexión: probablemente no has iniciado el servidor");
+            System.out.println(e.getMessage());
         }
     }
 
     /**
-     * 
+     *
      * La conexión se cierra si el cliente manda un caracter "F"
      */
     public void iniciarConexion() {
         Scanner leer = new Scanner(System.in);
-        String cadena = "";
+        String cadena;
         boolean bandera = true;
 
         try {
             while (bandera) {
                 // Flujo de datos para enviar el mensaje al cliente
                 DataOutputStream buffer = new DataOutputStream(socket.getOutputStream());
-                
+
                 System.out.println("Dame el valor para enviar al servidor: ");
                 cadena = leer.nextLine();
-                
+
                 // Enviar la cadena al servidor
                 buffer.writeUTF(cadena);
                 System.out.println("Mensaje enviado: " + cadena);
@@ -60,7 +62,8 @@ public class SocketCliente {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Ha ocurrido una excepción de I/O");
+            System.out.println(e.getMessage());
         }
     }
 }

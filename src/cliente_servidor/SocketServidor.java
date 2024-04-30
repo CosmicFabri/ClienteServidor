@@ -27,8 +27,8 @@ class SocketServidor {
     }
 
     /**
-     * Acepta las conexiones con el cliente y recibe los datos
-     * La conexión termina cuando el cliente manda un caracter "F" o "f"
+     * Acepta las conexiones con el cliente y recibe los datos La conexión
+     * termina cuando el cliente manda un caracter "F" o "f"
      */
     public void iniciarConexion() {
         String cadena = "";
@@ -45,7 +45,7 @@ class SocketServidor {
                 DataInputStream flujo = new DataInputStream(aux);
                 cadena = flujo.readUTF();
 
-                System.out.println("Cadena RECIBIDA del cliente:" + cadena);
+                System.out.println("Cadena RECIBIDA del cliente: " + cadena);
 
                 if (cadena.equalsIgnoreCase("f")) {
                     System.out.println("Servidor Desconectado");
@@ -53,7 +53,7 @@ class SocketServidor {
                     bandera = false;
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }

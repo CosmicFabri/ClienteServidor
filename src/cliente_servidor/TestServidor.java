@@ -5,10 +5,11 @@
 package cliente_servidor;
 
 /**
- * 
+ *
  * @author miguel
  */
 public class TestServidor {
+
     public static void main(String[] args) {
         SocketServidor servidor = new SocketServidor();
         servidor.iniciarConexion();

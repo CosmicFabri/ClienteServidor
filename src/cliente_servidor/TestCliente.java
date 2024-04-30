@@ -4,12 +4,15 @@
  */
 package cliente_servidor;
 
+import java.io.IOException;
+
 /**
  *
  * @author miguel
  */
 public class TestCliente {
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
         SocketCliente cliente = new SocketCliente();
         cliente.iniciarConexion();
     }
