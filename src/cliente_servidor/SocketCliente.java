@@ -56,7 +56,7 @@ public class SocketCliente {
                 buffer.writeUTF(cadena);
                 System.out.println("Mensaje enviado: " + cadena);
 
-                if (cadena.equalsIgnoreCase("f")) {
+                if (cadena.equalsIgnoreCase("exit")) {
                     bandera = false;
                     System.out.println("Conexión finalizada");
                 }
