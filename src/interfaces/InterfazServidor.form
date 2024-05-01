@@ -82,6 +82,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="TextGivenData">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>

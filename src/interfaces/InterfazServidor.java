@@ -4,6 +4,9 @@
  */
 package interfaces;
 
+import java.net.*;
+import java.io.*;
+
 /**
  *
  * @author Fabrizio
@@ -13,6 +16,12 @@ public class InterfazServidor extends javax.swing.JFrame {
     /**
      * Creates new form InterfazServidor
      */
+    
+    static ServerSocket serverSocket;
+    static Socket socket;
+    static DataInputStream dataInput;
+    static DataOutputStream dataOutput;
+    
     public InterfazServidor() {
         initComponents();
     }
@@ -129,12 +138,31 @@ public class InterfazServidor extends javax.swing.JFrame {
                 new InterfazServidor().setVisible(true);
             }
         });
+        
+        String messageIn = "";
+        
+        try {
+            serverSocket = new ServerSocket(1201); // Server starts at port 1201
+            socket = serverSocket.accept(); // Server will accept the connection
+            
+            dataInput = new DataInputStream(socket.getInputStream());
+            dataOutput = new DataOutputStream(socket.getOutputStream());
+            
+            while(!messageIn.equals("exit")){
+                messageIn = dataInput.readUTF();
+                
+                // Displaying the message from the client...
+                TextGivenData.setText(TextGivenData.getText().trim() + "\n" + messageIn);
+            }
+        } catch(Exception e) {
+            // Handle the exception
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActivateServer;
     private javax.swing.JLabel ServerTitle;
-    private javax.swing.JTextField TextGivenData;
+    private static javax.swing.JTextField TextGivenData;
     private javax.swing.JTextField TextNetPort;
     private javax.swing.JTextField TxtClient;
     private javax.swing.JButton jButton1;
