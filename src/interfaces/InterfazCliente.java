@@ -4,11 +4,20 @@
  */
 package interfaces;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.Socket;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Fabrizio
  */
 public class InterfazCliente extends javax.swing.JFrame {
+
+    static Socket socket;
+    static DataInputStream dataInput;
+    static DataOutputStream dataOutput;
 
     /**
      * Creates new form InterfazCliente
@@ -26,6 +35,7 @@ public class InterfazCliente extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jToggleButton1 = new javax.swing.JToggleButton();
         BtnDisconnect = new javax.swing.JButton();
         TextGivenData = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -37,6 +47,9 @@ public class InterfazCliente extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         TextSendAgain = new javax.swing.JTextField();
         BtnSend = new javax.swing.JButton();
+        BtnConnect = new javax.swing.JButton();
+
+        jToggleButton1.setText("jToggleButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,6 +82,13 @@ public class InterfazCliente extends javax.swing.JFrame {
             }
         });
 
+        BtnConnect.setText("Conectar");
+        BtnConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnConnectActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -86,14 +106,14 @@ public class InterfazCliente extends javax.swing.JFrame {
                             .addGap(26, 26, 26)
                             .addComponent(TextPort, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(BtnSend)
-                        .addGap(26, 26, 26)
-                        .addComponent(BtnDisconnect))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(26, 26, 26)
-                        .addComponent(TextTCPIP, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addComponent(TextTCPIP, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(BtnConnect)
+                        .addGap(43, 43, 43)
+                        .addComponent(BtnDisconnect)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(TextGivenData, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -102,6 +122,10 @@ public class InterfazCliente extends javax.swing.JFrame {
                 .addGap(119, 119, 119)
                 .addComponent(ClientTitle)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BtnSend)
+                .addGap(119, 119, 119))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,7 +138,7 @@ public class InterfazCliente extends javax.swing.JFrame {
                     .addComponent(TextTCPIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -123,24 +147,63 @@ public class InterfazCliente extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(TextSendAgain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 30, 30)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(BtnSend)
+                            .addComponent(BtnConnect)
                             .addComponent(BtnDisconnect)))
-                    .addComponent(TextGivenData))
-                .addContainerGap(44, Short.MAX_VALUE))
+                    .addComponent(TextGivenData, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BtnSend)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDisconnectActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Saber si el socket esta conectado para luego desconectarlo
+            if (socket != null) {
+                socket.close();
+                dataInput.close();
+                dataOutput.close();
+                JOptionPane.showMessageDialog(null, "Desconexión establecida", "Desconexión exitosa", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al desconectar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BtnDisconnectActionPerformed
 
     private void BtnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSendActionPerformed
-        // TODO add your handling code here:
+        try {
+            //saber si el socket ya se inicializo y se conecto al servidor
+            if (socket != null && socket.isConnected()) {
+                String mensaje = TextSendAgain.getText();
+                dataOutput.writeUTF(mensaje);
+                TextSendAgain.setText("");
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay una conexión establecida", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al enviar mensaje: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BtnSendActionPerformed
+
+    private void BtnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnConnectActionPerformed
+        try {
+            String ip = TextTCPIP.getText();        //Optenemos la Ip 
+            int puerto = Integer.parseInt(TextPort.getText());      //Optenemos el puerto
+            
+            //creamoos un socket con la ip y puerto
+            socket = new Socket(ip, puerto);
+            dataInput = new DataInputStream(socket.getInputStream());       //entrada de datos
+            dataOutput = new DataOutputStream(socket.getOutputStream());    //salida de datos
+
+            JOptionPane.showMessageDialog(null, "Conexión establecida", "Conexión exitosa", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al conectar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnConnectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,6 +241,7 @@ public class InterfazCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnConnect;
     private javax.swing.JButton BtnDisconnect;
     private javax.swing.JButton BtnSend;
     private javax.swing.JLabel ClientTitle;
@@ -189,5 +253,6 @@ public class InterfazCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }
