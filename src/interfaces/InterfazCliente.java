@@ -6,6 +6,7 @@ package interfaces;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import javax.swing.JOptionPane;
 
@@ -15,9 +16,9 @@ import javax.swing.JOptionPane;
  */
 public class InterfazCliente extends javax.swing.JFrame {
 
-    static Socket socket;
-    static DataInputStream dataInput;
-    static DataOutputStream dataOutput;
+    private Socket socket;
+    private DataInputStream dataInput;
+    private DataOutputStream dataOutput;
 
     /**
      * Creates new form InterfazCliente
@@ -37,7 +38,6 @@ public class InterfazCliente extends javax.swing.JFrame {
 
         jToggleButton1 = new javax.swing.JToggleButton();
         BtnDisconnect = new javax.swing.JButton();
-        TextGivenData = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         ClientTitle = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -49,6 +49,8 @@ public class InterfazCliente extends javax.swing.JFrame {
         BtnConnect = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TextValueSend = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TextMensajesRecibidos = new javax.swing.JTextArea();
 
         jToggleButton1.setText("jToggleButton1");
 
@@ -61,14 +63,11 @@ public class InterfazCliente extends javax.swing.JFrame {
             }
         });
 
-        TextGivenData.setEditable(false);
-        TextGivenData.setFocusable(false);
-
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("Valores recibidos");
+        jLabel4.setText("Datos recibidos");
 
         ClientTitle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        ClientTitle.setText("Aplicación Socket Cliente");
+        ClientTitle.setText("Aplicación Cliente");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("TCP/IP");
@@ -77,7 +76,7 @@ public class InterfazCliente extends javax.swing.JFrame {
         jLabel2.setText("Puerto");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Valor a enviar");
+        jLabel3.setText("Datos a enviar al servidor");
 
         BtnSend.setText("Enviar");
         BtnSend.addActionListener(new java.awt.event.ActionListener() {
@@ -97,35 +96,23 @@ public class InterfazCliente extends javax.swing.JFrame {
         TextValueSend.setRows(5);
         jScrollPane1.setViewportView(TextValueSend);
 
+        TextMensajesRecibidos.setEditable(false);
+        TextMensajesRecibidos.setColumns(20);
+        TextMensajesRecibidos.setRows(5);
+        TextMensajesRecibidos.setFocusable(false);
+        jScrollPane2.setViewportView(TextMensajesRecibidos);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(115, 115, 115)
-                .addComponent(ClientTitle)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4)))
-                        .addGap(52, 52, 52))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1)
-                            .addComponent(TextGivenData))))
-                .addGap(86, 86, 86))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BtnSend)
+                    .addComponent(jLabel4)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -139,17 +126,20 @@ public class InterfazCliente extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(BtnConnect)
                             .addComponent(BtnDisconnect)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(155, 155, 155)
-                        .addComponent(BtnSend)))
+                    .addComponent(jLabel3)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ClientTitle)
+                .addGap(131, 131, 131))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(24, 24, 24)
                 .addComponent(ClientTitle)
-                .addGap(26, 26, 26)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(TextTCPIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -160,21 +150,55 @@ public class InterfazCliente extends javax.swing.JFrame {
                     .addComponent(TextPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnDisconnect))
                 .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addGap(12, 12, 12)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(BtnSend)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TextGivenData, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Hilo que permite recibir los mensajes del servidor
+    private class ConexionServidor extends Thread {
+        // No tiene atributos porque usa las variables de la clase
+        
+        public ConexionServidor () {}
+        
+        @Override
+        public void run() {
+            // Usar el flujo de datos de entrada para recibir los mensajes
+            
+            String mensajeRecibido = "";
+            
+            try {
+                while (!mensajeRecibido.equals("exit")) {
+                    mensajeRecibido = dataInput.readUTF();
+                    // Mostrar el mensaje en la interfaz
+                    TextMensajesRecibidos.setText(TextMensajesRecibidos.getText() + mensajeRecibido + "\n");
+                }
+                
+                // Después de que se reciba "exit" para cerrar la conexión
+                socket.close();
+                dataInput.close();
+                JOptionPane.showInternalMessageDialog(null, "Cliente desconectado", "Cliente desconectado", JOptionPane.INFORMATION_MESSAGE);
+               
+                // Cerrar la ventana y volverla a abrir
+                dispose();
+                InterfazCliente nuevaVentana = new InterfazCliente();
+                nuevaVentana.setVisible(true);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }            
+        }
+    }
+    
     private void BtnDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDisconnectActionPerformed
         try {
             // Saber si el socket esta conectado para luego desconectarlo
@@ -214,9 +238,13 @@ public class InterfazCliente extends javax.swing.JFrame {
             dataInput = new DataInputStream(socket.getInputStream());       //entrada de datos
             dataOutput = new DataOutputStream(socket.getOutputStream());    //salida de datos
 
-            JOptionPane.showMessageDialog(null, "Conexión establecida", "Conexión exitosa", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Conexión establecida con el servidor", "Conexión exitosa", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Crear y ejecutar el hilo para recibir mensajes del servidor
+            ConexionServidor conexion = new ConexionServidor();
+            conexion.start();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al conectar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al conectarse con el servidor: " + e.getMessage(), "Error de conexión", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_BtnConnectActionPerformed
 
@@ -260,7 +288,7 @@ public class InterfazCliente extends javax.swing.JFrame {
     private javax.swing.JButton BtnDisconnect;
     private javax.swing.JButton BtnSend;
     private javax.swing.JLabel ClientTitle;
-    private javax.swing.JTextField TextGivenData;
+    private javax.swing.JTextArea TextMensajesRecibidos;
     private javax.swing.JTextField TextPort;
     private javax.swing.JTextField TextTCPIP;
     private javax.swing.JTextArea TextValueSend;
@@ -269,6 +297,7 @@ public class InterfazCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }

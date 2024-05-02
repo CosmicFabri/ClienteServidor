@@ -9,13 +9,15 @@ import java.io.*;
 import javax.swing.JOptionPane;
 
 /**
- * Esta clase no tiene atributos como tal porque la creación de sockets y flujos 
- * se realizan en el interior del hilo que maneja las conexiones
+ * 
  * @author Fabrizio
+ * @author Miguel
  */
-public class InterfazServidor extends javax.swing.JFrame {  
+public class InterfazServidor extends javax.swing.JFrame {
+
+    // El socket se inicializa cuando el cliente acepta la conexión
     private Socket socket;
-    
+
     /**
      * Creates new form InterfazServidor
      */
@@ -34,7 +36,6 @@ public class InterfazServidor extends javax.swing.JFrame {
 
         jLabel2 = new javax.swing.JLabel();
         BtnEnviarACliente = new javax.swing.JButton();
-        TextEnviarACliente = new javax.swing.JTextField();
         ServerTitle = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         TextPuertoRed = new javax.swing.JTextField();
@@ -42,6 +43,8 @@ public class InterfazServidor extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TextDatosRecibidos = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TextEnviarACliente = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,7 +68,7 @@ public class InterfazServidor extends javax.swing.JFrame {
             }
         });
 
-        BtnActivateServer.setText("Activar Server");
+        BtnActivateServer.setText("Activar servidor");
         BtnActivateServer.setFocusable(false);
         BtnActivateServer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,6 +85,10 @@ public class InterfazServidor extends javax.swing.JFrame {
 
         jLabel3.setText("Datos a enviar al cliente");
 
+        TextEnviarACliente.setColumns(20);
+        TextEnviarACliente.setRows(5);
+        jScrollPane2.setViewportView(TextEnviarACliente);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -89,7 +96,6 @@ public class InterfazServidor extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TextEnviarACliente, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -100,10 +106,12 @@ public class InterfazServidor extends javax.swing.JFrame {
                                 .addComponent(TextPuertoRed, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(BtnActivateServer))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnEnviarACliente)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -121,9 +129,9 @@ public class InterfazServidor extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(TextEnviarACliente, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(BtnEnviarACliente)
                 .addGap(18, 18, 18))
         );
@@ -132,8 +140,8 @@ public class InterfazServidor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     // Clase que permite manejar la conexión en un hilo separado al principal
-    // TODO: manejar el envío de datos al cliente
     private class ManejarConexion extends Thread {
+
         private int puertoRed;
         private ServerSocket serverSocket;
         private DataInputStream dataInput;
@@ -149,7 +157,7 @@ public class InterfazServidor extends javax.swing.JFrame {
                 serverSocket = new ServerSocket(puertoRed);
                 JOptionPane.showInternalMessageDialog(null, "Servidor iniciado en el puerto " + Integer.toString(puertoRed), "Servidor iniciado", JOptionPane.INFORMATION_MESSAGE);
                 String mensajeRecibido = "";
-                
+
                 // Aceptamos la conexión del cliente e inicializamos el socket 
                 socket = serverSocket.accept();
                 JOptionPane.showInternalMessageDialog(null, "Conexión iniciada con el cliente", "Conexión iniciada", JOptionPane.INFORMATION_MESSAGE);
@@ -161,13 +169,13 @@ public class InterfazServidor extends javax.swing.JFrame {
                     TextDatosRecibidos.setText(TextDatosRecibidos.getText() + mensajeRecibido + "\n");
                     System.out.println(mensajeRecibido);
                 }
-                
+
                 // Después de que se reciba "exit" para cerrar la conexión
                 socket.close();
                 dataInput.close();
                 System.out.println("Servidor Desconectado");
                 JOptionPane.showInternalMessageDialog(null, "Servidor desconectado", "Servidor desconectado", JOptionPane.INFORMATION_MESSAGE);
-               
+
                 // Cerrar la ventana y volverla a abrir
                 dispose();
                 InterfazServidor nuevaVentana = new InterfazServidor();
@@ -184,7 +192,7 @@ public class InterfazServidor extends javax.swing.JFrame {
         int puertoRed = Integer.parseInt(puertoUsuario);
 
         try {
-            // Iniciar el hilo que maneja la conexión
+            // Crear e iniciar el hilo que maneja la conexión y recibe los datos
             ManejarConexion hiloConexion = new ManejarConexion(puertoRed);
             hiloConexion.start();
         } catch (Exception e) {
@@ -201,14 +209,15 @@ public class InterfazServidor extends javax.swing.JFrame {
     // Para eso hay que comprobar si ya existe una conexión
     // si no existe, muestra un error
     private void BtnEnviarAClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEnviarAClienteActionPerformed
-               
         if (this.socket != null) {
             String mensajeAEnviar = TextEnviarACliente.getText();
-            
+
             // Obtiene el flujo de salida
             try {
-                DataOutputStream datOutput = new DataOutputStream(socket.getOutputStream());
-                datOutput.writeUTF(mensajeAEnviar);
+                DataOutputStream dataOutput = new DataOutputStream(socket.getOutputStream());
+                dataOutput.writeUTF(mensajeAEnviar);
+                // Limpiar el text area
+                TextEnviarACliente.setText("");
             } catch (IOException e) {
                 System.out.println("Ha ocurrido una excepción de I/O");
                 System.out.println(e.getMessage());
@@ -218,51 +227,52 @@ public class InterfazServidor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BtnEnviarAClienteActionPerformed
 
-        /**
-         * @param args the command line arguments
-         */
-        public static void main(String args[]) {
-            /* Set the Nimbus look and feel */
-            //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-            /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-             */
-            try {
-                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                        break;
-                    }
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
                 }
-            } catch (ClassNotFoundException ex) {
-                java.util.logging.Logger.getLogger(InterfazServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                java.util.logging.Logger.getLogger(InterfazServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                java.util.logging.Logger.getLogger(InterfazServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-                java.util.logging.Logger.getLogger(InterfazServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
-            //</editor-fold>
-
-            /* Create and display the form */
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new InterfazServidor().setVisible(true);
-                }
-            });
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(InterfazServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(InterfazServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(InterfazServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(InterfazServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new InterfazServidor().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActivateServer;
     private javax.swing.JButton BtnEnviarACliente;
     private javax.swing.JLabel ServerTitle;
     private javax.swing.JTextArea TextDatosRecibidos;
-    private javax.swing.JTextField TextEnviarACliente;
+    private javax.swing.JTextArea TextEnviarACliente;
     private javax.swing.JTextField TextPuertoRed;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }
