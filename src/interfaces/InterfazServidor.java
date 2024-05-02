@@ -13,7 +13,9 @@ import javax.swing.JOptionPane;
  * se realizan en el interior del hilo que maneja las conexiones
  * @author Fabrizio
  */
-public class InterfazServidor extends javax.swing.JFrame {   
+public class InterfazServidor extends javax.swing.JFrame {  
+    private Socket socket;
+    
     /**
      * Creates new form InterfazServidor
      */
@@ -31,8 +33,8 @@ public class InterfazServidor extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        TxtClient = new javax.swing.JTextField();
+        BtnEnviarACliente = new javax.swing.JButton();
+        TextEnviarACliente = new javax.swing.JTextField();
         ServerTitle = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         TextPuertoRed = new javax.swing.JTextField();
@@ -45,7 +47,12 @@ public class InterfazServidor extends javax.swing.JFrame {
 
         jLabel2.setText("Datos Recibidos");
 
-        jButton1.setText("Enviar a Cliente");
+        BtnEnviarACliente.setText("Enviar a Cliente");
+        BtnEnviarACliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEnviarAClienteActionPerformed(evt);
+            }
+        });
 
         ServerTitle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ServerTitle.setText("Aplicación Servidor");
@@ -82,7 +89,7 @@ public class InterfazServidor extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TxtClient, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextEnviarACliente, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -94,8 +101,8 @@ public class InterfazServidor extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(BtnActivateServer))))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BtnEnviarACliente)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -115,9 +122,9 @@ public class InterfazServidor extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(TxtClient, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(TextEnviarACliente, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(BtnEnviarACliente)
                 .addGap(18, 18, 18))
         );
 
@@ -140,11 +147,12 @@ public class InterfazServidor extends javax.swing.JFrame {
             try {
                 // Iniciar el socket servidor en el puerto "puertoRed"
                 serverSocket = new ServerSocket(puertoRed);
-                System.out.println("Servidor iniciado en el puerto " + Integer.toString(puertoRed));
+                JOptionPane.showInternalMessageDialog(null, "Servidor iniciado en el puerto " + Integer.toString(puertoRed), "Servidor iniciado", JOptionPane.INFORMATION_MESSAGE);
                 String mensajeRecibido = "";
                 
-                // Aceptamos la conexión del cliente
-                Socket socket = serverSocket.accept();
+                // Aceptamos la conexión del cliente e inicializamos el socket 
+                socket = serverSocket.accept();
+                JOptionPane.showInternalMessageDialog(null, "Conexión iniciada con el cliente", "Conexión iniciada", JOptionPane.INFORMATION_MESSAGE);
                 // Obtenemos el flujo de entrada de datos del cliente
                 dataInput = new DataInputStream(socket.getInputStream());
 
@@ -188,6 +196,28 @@ public class InterfazServidor extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TextPuertoRedActionPerformed
 
+    // Obtiene el texto, obtiene el flujo de salida del socket y manda
+    // el mensaje al cliente
+    // Para eso hay que comprobar si ya existe una conexión
+    // si no existe, muestra un error
+    private void BtnEnviarAClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEnviarAClienteActionPerformed
+               
+        if (this.socket != null) {
+            String mensajeAEnviar = TextEnviarACliente.getText();
+            
+            // Obtiene el flujo de salida
+            try {
+                DataOutputStream datOutput = new DataOutputStream(socket.getOutputStream());
+                datOutput.writeUTF(mensajeAEnviar);
+            } catch (IOException e) {
+                System.out.println("Ha ocurrido una excepción de I/O");
+                System.out.println(e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay una conexión inciada con el cliente: ", "Error de conexión", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnEnviarAClienteActionPerformed
+
         /**
          * @param args the command line arguments
          */
@@ -225,11 +255,11 @@ public class InterfazServidor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActivateServer;
+    private javax.swing.JButton BtnEnviarACliente;
     private javax.swing.JLabel ServerTitle;
     private javax.swing.JTextArea TextDatosRecibidos;
+    private javax.swing.JTextField TextEnviarACliente;
     private javax.swing.JTextField TextPuertoRed;
-    private javax.swing.JTextField TxtClient;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

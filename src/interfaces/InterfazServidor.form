@@ -26,7 +26,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="TxtClient" min="-2" pref="271" max="-2" attributes="0"/>
+                  <Component id="TextEnviarACliente" min="-2" pref="271" max="-2" attributes="0"/>
                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -41,8 +41,8 @@
                       </Group>
                   </Group>
                   <Component id="jScrollPane1" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
-                  <Component id="jButton1" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" alignment="0" min="-2" pref="125" max="-2" attributes="0"/>
+                  <Component id="BtnEnviarACliente" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel3" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="32" max="32767" attributes="0"/>
           </Group>
@@ -66,9 +66,9 @@
               <EmptySpace pref="21" max="32767" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="TxtClient" min="-2" pref="111" max="-2" attributes="0"/>
+              <Component id="TextEnviarACliente" min="-2" pref="111" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+              <Component id="BtnEnviarACliente" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -80,12 +80,15 @@
         <Property name="text" type="java.lang.String" value="Datos Recibidos"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="BtnEnviarACliente">
       <Properties>
         <Property name="text" type="java.lang.String" value="Enviar a Cliente"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnEnviarAClienteActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="TxtClient">
+    <Component class="javax.swing.JTextField" name="TextEnviarACliente">
     </Component>
     <Component class="javax.swing.JLabel" name="ServerTitle">
       <Properties>
